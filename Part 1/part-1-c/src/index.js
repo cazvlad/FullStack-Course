@@ -36,16 +36,16 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom';
 
+const Display = ({ counter }) => <div><p>Current counter is {counter}</p></div>
+
+const Button = ({ handleClick, text }) => (
+    <button onClick={handleClick}>
+      {text}
+    </button>
+  )
+  
 const App = (props) => {
   const [ counter, setCounter ] = useState(0)
-
-  const Display = ({ counter }) => <div><p>Current counter is {counter}</p></div>
-
-  const Button = ({ handleClick, text }) => (
-      <button onClick={handleClick}>
-        {text}
-      </button>
-    )
 
   const increaseByOne = () => {
     setCounter(counter + 1)
@@ -78,7 +78,4 @@ const App = (props) => {
   )
 }
 
-ReactDOM.render(
-  <App />, 
-  document.getElementById('root')
-)
+ReactDOM.render(<App />, document.getElementById('root'))
