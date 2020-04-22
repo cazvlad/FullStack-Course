@@ -63,10 +63,6 @@ const App = () => {
     ]
   }
 
-  course.parts.forEach(value => {
-    console.log(value)
-  })
-
   return (
     <div>
       <Header course={course.name}/>
