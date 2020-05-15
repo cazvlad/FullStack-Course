@@ -16,18 +16,19 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    console.log('button clicked', event.target)
+    console.log('Form Submitted!', event.target)
     const personObject = {
         name: newName,
         number: newNumber
     }
     if (persons.some(p => p.name === personObject.name)) {
-        console.log('ERROR! Duplicate name found')
-        window.alert(`${newName} is already added to phonebook`)
+        console.log('ERROR! Duplicate name found!')
+        window.alert(`${newName} is already added to phonebook!`)
     } else {
         setPersons(persons.concat(personObject))
         setNewName('')
-        console.log('added successfully')
+        setNewNumber('')
+        console.log('New contact added successfully!')
     } 
   }
 
@@ -56,7 +57,7 @@ const App = () => {
             newFilter={newFilter}
             persons={persons}
         />
-      <h3>Add a new entry</h3>
+      <h3>Add a new contact</h3>
         <PersonForm 
             addPerson={addPerson}
             handleNameChange={handleNameChange}
@@ -64,7 +65,7 @@ const App = () => {
             newName={newName}
             newNumber={newNumber}
         />
-      <h3>Names and Numbers</h3>
+      <h3>Contacts</h3>
         <Persons 
             key={persons.name}
             persons={persons}
