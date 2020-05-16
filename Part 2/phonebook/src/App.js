@@ -3,12 +3,14 @@ import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newFilter, setNewFilter ] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -39,7 +41,10 @@ const App = () => {
             setPersons(persons.map(person => person.id !== dp.id ? person : response))
             setNewName('')
             setNewNumber('')
-            console.log('Number changed successfully!');
+            setErrorMessage(`${personObject.name}'s number was changed successfully!`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           })
       } else {
           console.log(`Number change denied for ${dp.name}...`)
@@ -49,9 +54,12 @@ const App = () => {
           .create(personObject)
           .then(returnedPerson => {
             setPersons(persons.concat(returnedPerson))
+            setErrorMessage(`${personObject.name} was added successfully!`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
             setNewName('')
             setNewNumber('')
-            console.log('New contact added successfully!')
           })
     } 
   }
@@ -80,7 +88,10 @@ const App = () => {
         .deletePerson(id)
         .then(deletedPerson => {
           setPersons(persons.filter(p => p.id !== id))
-          console.log('Contact deleted successfully!')
+          setErrorMessage(`Person '${dp.name}' was removed from the Phonebook`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })
     } else {
         console.log(`Delete denied for ${dp.name}...`)
@@ -89,13 +100,15 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+        <Notification message={errorMessage}/>
+      <h2>Search for</h2>
         <Filter
           handleFilter={handleFilter}
           newFilter={newFilter}
           persons={persons}
         />
-      <h3>Add a new contact</h3>
+      <h2>Add a new contact</h2>
         <PersonForm 
           addPerson={addPerson}
           handleNameChange={handleNameChange}
@@ -103,7 +116,7 @@ const App = () => {
           newName={newName}
           newNumber={newNumber}
         />
-      <h3>Contacts</h3>
+      <h2>Contacts</h2>
         <Persons 
           key={persons.id}
           persons={persons}
