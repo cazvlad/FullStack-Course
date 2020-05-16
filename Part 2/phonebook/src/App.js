@@ -4,13 +4,15 @@ import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import personService from './services/persons'
 import Notification from './components/Notification'
+import Footer from './components/Footer'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newFilter, setNewFilter ] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [ errorMessage, setErrorMessage ] = useState(null)
+  const [ errorCheck, setErrorCheck ] = useState(false)
 
   useEffect(() => {
     personService
@@ -41,10 +43,19 @@ const App = () => {
             setPersons(persons.map(person => person.id !== dp.id ? person : response))
             setNewName('')
             setNewNumber('')
+            setErrorCheck(false)
             setErrorMessage(`${personObject.name}'s number was changed successfully!`)
             setTimeout(() => {
               setErrorMessage(null)
             }, 5000)
+          })
+          .catch(error => {
+            setErrorCheck(true)
+            setErrorMessage(`${personObject.name} was already removed from server`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+            setPersons(persons.filter(p => p.id !== dp.id))
           })
       } else {
           console.log(`Number change denied for ${dp.name}...`)
@@ -54,6 +65,7 @@ const App = () => {
           .create(personObject)
           .then(returnedPerson => {
             setPersons(persons.concat(returnedPerson))
+            setErrorCheck(false)
             setErrorMessage(`${personObject.name} was added successfully!`)
             setTimeout(() => {
               setErrorMessage(null)
@@ -88,10 +100,19 @@ const App = () => {
         .deletePerson(id)
         .then(deletedPerson => {
           setPersons(persons.filter(p => p.id !== id))
-          setErrorMessage(`Person '${dp.name}' was removed from the Phonebook`)
+          setErrorCheck(false)
+          setErrorMessage(`${dp.name} was removed from the Phonebook`)
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
+        })
+        .catch(error => {
+          setErrorCheck(true)
+          setErrorMessage(`${dp.name} was already removed from server`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+          setPersons(persons.filter(p => p.id !== id))
         })
     } else {
         console.log(`Delete denied for ${dp.name}...`)
@@ -101,7 +122,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-        <Notification message={errorMessage}/>
+        <Notification message={errorMessage} checker={errorCheck}/>
       <h2>Search for</h2>
         <Filter
           handleFilter={handleFilter}
@@ -123,6 +144,7 @@ const App = () => {
           newFilter={newFilter} 
           handleDelete={handleDelete}
         />
+      <Footer />
     </div>
   )
 }

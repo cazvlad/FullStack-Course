@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Ada Lovelace",
-      "number": "4315678854",
-      "id": 2
-    },
-    {
       "name": "Dan Abramov",
       "number": "43242314332",
       "id": 3
@@ -26,9 +21,14 @@
       "id": 8
     },
     {
-      "name": "Bob Johnson",
-      "number": "321432321",
+      "name": "ron test",
+      "number": "326153721",
       "id": 9
+    },
+    {
+      "name": "senor largo",
+      "number": "321421421",
+      "id": 10
     }
   ]
 }
